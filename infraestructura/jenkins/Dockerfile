@@ -1,3 +1,4 @@
+#En el caso de Jenkins, necesito el dockerfile, ya que necesitaré instalarle cosas dentro (pyhton para los scripts) que no vienen en la iimagen por defecto.
 FROM jenkins/jenkins:2.541.1-jdk21
 USER root
 RUN apt-get update && apt-get install -y lsb-release
