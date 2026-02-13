@@ -56,7 +56,7 @@ pipeline {
     post {
         always {
             echo 'Limpiando los archivos temporales generados por el pipeline'
-            cleanWs()
+            deleteDir()
         }
     }
 }
