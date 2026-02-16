@@ -14,18 +14,38 @@ pipeline {
 
     // Definicion de las etapas del pipeline
     stages {
-        stage('Stage 1 - Descarga del repositorio') {
+        stage('Stage 0 - Preparación del entorno') {
+            steps {
+                //Verificar la instalacion correcta
+                sh 'python3 --version'
+                sh 'node --version'
+            }
+        }
+        stage('Stage 1 - Descarga del repositorio y analisis con SonarQube') {
             steps {
                 echo 'En esta etapa se descarga el repositorio que hizo el webhook'
                 checkout scm
+
+                echo 'Analisis con SonarQube'
+                script {
+                    echo 'Se ejecuta SonarQube Scanner para analizar el código'
+                    withSonarQubeEnv('SonarQube-Server') {
+                        sh 'sonar-scanner -Dsonar.projectKey=TFG-CodeGuardian -Dsonar.sources=.'
+                    }
+                    echo 'Aqui SonarQube medira la calidad del codigo'
+
+                    timeout(time: 5, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
             }
         }
     }
-    //Borra los archivos temporales generados por el pipeline
-    post {
-        always {
-            echo 'Limpiando los archivos temporales generados por el pipeline'
-            deleteDir()
+        //Borra los archivos temporales generados por el pipeline
+        post {
+            always {
+                echo 'Limpiando los archivos temporales generados por el pipeline'
+                deleteDir()
+            }
         }
-    }
 }
