@@ -10,7 +10,7 @@ public class Funcion {
             System.out.println("El resultado es: " + resultado);
         } catch (ArithmeticException e) {
             //Devolvera un cero, lo cual es inapropiado
-            return 0
+            return 0;
         }
     }
 
