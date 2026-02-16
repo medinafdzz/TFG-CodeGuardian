@@ -9,19 +9,25 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
   https://download.docker.com/linux/debian \
   $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-# Instalacion de Docker CLI para poder usarlo en los pipelines de Jenkins
-RUN apt-get update && apt-get install -y docker-ce-cli
+# Instalacion de Docker CLI + Node.js/NPM para poder usarlo en los pipelines de Jenkins
+RUN apt-get update && apt-get install -y \
+    docker-ce-cli \
+    git \
+    nodejs \
+    npm
 
 # Instalacion de Python y pip para poder usarlo en los pipelines de Jenkins
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip
 
-USER jenkins
+
 
 RUN npm install -g \
     @modelcontextprotocol/server-github \
-    github:SonarSource/sonarqube-mcp-server \
-    @sonar/scan
+    @sonar/scan \
+    mcp-sonarqube
 
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
+
+USER jenkins
