@@ -14,32 +14,9 @@ pipeline {
 
     // Definicion de las etapas del pipeline
     stages {
-        stage('Stage 1 - Descarga del repositorio') {
+        stage('Stage 0 - Preparación del entorno') {
             steps {
-                echo 'En esta etapa se descarga el repositorio que hizo el webhook'
-                checkout scm
-            }
-        }
-        stage('Stage 2') {
-                // Declaramos un agente específico para esta etapa, que utilizará una imagen de Docker con Python y NodeJS preinstalados
-                agent {
-                    docker {
-                        image 'nikolaik/python-nodejs:python3.12-nodejs20'
-                        reuseNode true
-
-                        // Conectar a la red de servicios para que los contenedores puedan comunicarse entre sí, la que definí en el compose
-                        args '--network services-net'
-                    }
-                }
-            // El steps se situa despues porque una vez termine, el contenedor se destruye y no se pueden ejecutar comandos en él
-            steps {
-                echo 'En esta etapa se preparó el entorno de Jenkins para la ejecución de los scripts de Python y NodeJS'
-                echo 'A continuación se prepara la instalación de los MCP Servers de GitHub y SonarQube'
-
-                //Verifico que se han instalado correctamente Python y NodeJS
-                sh 'python --version'
-                sh 'node --version'
-
+                echo 'Se instala SonnarScanner y los MCP Servers de GitHub y SonarQube'
                 //Instalación del MCP Server de GitHub
                 sh 'npm install -g @modelcontextprotocol/server-github'
 
@@ -47,8 +24,16 @@ pipeline {
                 sh 'npm install -g github:SonarSource/sonarqube-mcp-server'
 
                 //Instalación del MCP Server de SonarQube
-                sh 'npm install -g @sonar/scan'
+                sh 'npm install -g @sonar/scan'                
             }
+        }
+        stage('Stage 1 - Descarga del repositorio') {
+            steps {
+                echo 'En esta etapa se descarga el repositorio que hizo el webhook'
+                checkout scm
+            }
+        }
+        stage('Stage 2') {
         }
     }
 
