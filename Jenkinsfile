@@ -26,11 +26,13 @@ pipeline {
                 echo 'En esta etapa se descarga el repositorio que hizo el webhook'
                 checkout scm
 
+                echo 'Compilando el código de ejemplo Java para el análisis de SonarQube'
+                sh 'javac src/*.java'
                 echo 'Analisis con SonarQube'
                 script {
                     echo 'Se ejecuta SonarQube Scanner para analizar el código'
                     withSonarQubeEnv('SonarQube-Server') {
-                        sh 'sonar-scanner -Dsonar.projectKey=TFG-CodeGuardian -Dsonar.sources=.'
+                        sh 'sonar-scanner -Dsonar.projectKey=TFG-CodeGuardian -Dsonar.sources=. -Dsonar.java.binaries=src'
                     }
                     echo 'Aqui SonarQube medira la calidad del codigo'
 
