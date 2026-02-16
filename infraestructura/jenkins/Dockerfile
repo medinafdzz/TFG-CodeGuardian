@@ -18,4 +18,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip
 
 USER jenkins
+
+RUN npm install -g \
+    @modelcontextprotocol/server-github \
+    github:SonarSource/sonarqube-mcp-server \
+    @sonar/scan
+
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"

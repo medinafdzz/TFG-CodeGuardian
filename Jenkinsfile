@@ -14,28 +14,13 @@ pipeline {
 
     // Definicion de las etapas del pipeline
     stages {
-        stage('Stage 0 - Preparación del entorno') {
-            steps {
-                echo 'Se instala SonnarScanner y los MCP Servers de GitHub y SonarQube'
-                //Instalación del MCP Server de GitHub
-                sh 'npm install -g @modelcontextprotocol/server-github'
-
-                //Instalación del MCP Server de SonarQube
-                sh 'npm install -g github:SonarSource/sonarqube-mcp-server'
-
-                //Instalación del MCP Server de SonarQube
-                sh 'npm install -g @sonar/scan'                
-            }
-        }
         stage('Stage 1 - Descarga del repositorio') {
             steps {
                 echo 'En esta etapa se descarga el repositorio que hizo el webhook'
                 checkout scm
             }
         }
-
     }
-
     //Borra los archivos temporales generados por el pipeline
     post {
         always {
