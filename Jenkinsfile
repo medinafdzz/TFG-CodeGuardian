@@ -33,8 +33,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Stage 2') {
-        }
+
     }
 
     //Borra los archivos temporales generados por el pipeline
