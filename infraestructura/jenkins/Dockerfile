@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip
 
-
-
+# Instalacion de SonarScanner y los MCP Servers de GitHub y SonarQube
 RUN npm install -g \
     @modelcontextprotocol/server-github \
     @sonar/scan \
