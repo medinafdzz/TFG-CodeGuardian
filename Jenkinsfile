@@ -42,6 +42,19 @@ pipeline {
                 }
             }
         }
+        stage('Stage 2 - Preparacion de variables para el agente IA') {
+            steps {
+                echo 'Aqui se cargarán las credenciales necesarias para el agente IA en variables de entorno'
+                withCredentials([
+                    string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_AUTH_TOKEN'),
+                    string(credentialsId: 'github-token', variable: 'GITHUB_AUTH_TOKEN'),
+                    string(credentialsId: 'LLM-token', variable: 'LLM_AUTH_TOKEN')
+                    ]) {
+                    echo 'Ejecución del agente IA'
+                    sh 'python3 agente.py'
+                    }
+            }
+        }
     }
         //Borra los archivos temporales generados por el pipeline
         post {
