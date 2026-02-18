@@ -51,6 +51,9 @@ pipeline {
                     string(credentialsId: 'LLM-token', variable: 'LLM_AUTH_TOKEN')
                     ]) {
                     echo 'Ejecución del agente IA'
+
+                    sh 'pip install requests google-generativeai --break-system-packages || pip install requests google-generativeai'
+                    
                     sh 'python3 agente.py'
                     }
             }
