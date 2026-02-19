@@ -1,4 +1,4 @@
-#En el caso de Jenkins, necesito el dockerfile, ya que necesitaré instalarle cosas dentro que no vienen en la iimagen por defecto.
+# For Jenkins, I need the Dockerfile since I need to install things inside that don't come in the default image.
 FROM jenkins/jenkins:2.541.1-jdk21
 USER root
 RUN apt-get update && apt-get install -y lsb-release
@@ -9,24 +9,27 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
   https://download.docker.com/linux/debian \
   $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-# Instalacion de Docker CLI + Node.js/NPM para poder usarlo en los pipelines de Jenkins
+# Installation of Docker CLI + Node.js/NPM to use it in Jenkins pipelines
 RUN apt-get update && apt-get install -y \
     docker-ce-cli \
     git \
     nodejs \
     npm
 
-# Instalacion de Python y pip para poder usarlo en los pipelines de Jenkins
+# Installation of Python and pip to use it in Jenkins pipelines
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip
 
-# Instalacion de SonarScanner y los MCP Servers de GitHub y SonarQube
+# Installation of SonarScanner and MCP Servers for GitHub and SonarQube
 RUN npm install -g \
     @modelcontextprotocol/server-github \
     @sonar/scan \
-    mcp-sonarqube
+    mcp-sonarqube \
+    bitbucket-mcp
 
+# Installation of Jenkins plugins for the pipeline
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
 
+# Jenkins needs to run as the jenkins user
 USER jenkins
