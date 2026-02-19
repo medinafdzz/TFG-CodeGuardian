@@ -36,7 +36,7 @@ pipeline {
 
                 env.SONARQUBE_PROJECT_KEY = env.REPO_NAME.replace('/', '_')
             }
-                echo "Repository name: ${REPO_NAME}"
+                echo "Repository name: ${env.REPO_NAME}"
 
                 echo 'Compiling the Java example code for SonarQube analysis'
 
