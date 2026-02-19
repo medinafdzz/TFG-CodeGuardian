@@ -34,8 +34,6 @@ pipeline {
             }
                 echo "Repository name: ${env.REPO_NAME}"
 
-                echo 'Compiling the Java example code for SonarQube analysis'
-
                 echo 'SonarQube analysis'
                 echo 'Execution of the SonarQube Scanner to analyze the code'
                 withSonarQubeEnv('SonarQube-Server') {
