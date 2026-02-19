@@ -1,7 +1,7 @@
 networks:
   services-net:
     name: "services-net"
-    driver: "bridge" # Permite la comunicación entre los contenedores bajo una misma red
+    driver: "bridge" # Allows communication between containers on the same network
 
 services:
 
@@ -9,14 +9,14 @@ services:
 
     container_name: "jenkins-blueocean"
 
-    # Se hace la build con el Dockerfile del proyecto
+    # Build using the project's Dockerfile
     build:
       context: ./jenkins
       dockerfile: Dockerfile
 
-    #Varibles de entorno creo que el resto no hacen falta, por que ya están en el Dockerfile
+    # Environment variables; the rest are defined in the Dockerfile
     environment:
-      - TZ=Europe/Madrid #Establece la zona horaria -> La usaré en los logs de Sonarqube y Jenkins para que tengan la misma zona horaria
+      - TZ=Europe/Madrid # Set timezone for consistent SonarQube and Jenkins logs
 
     networks:
       - "services-net"
@@ -29,7 +29,7 @@ services:
     
     volumes:
       - "jenkins-data:/var/jenkins_home"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/run/docker.sock:/var/run/docker.sock" # Allow Jenkins to control Docker on the host
 
   sonarqube-server:
 
@@ -53,10 +53,10 @@ services:
       - "sonarqube_extensions:/opt/sonarqube/extensions"
 
 volumes:
-# Volúmen de Jenkins
+  # Jenkins volume
   jenkins-data:
   
-  # Volúmenes de SonarQube (Nuevos y limpios)
+  # SonarQube volumes (fresh state)
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
